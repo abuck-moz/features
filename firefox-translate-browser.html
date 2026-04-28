@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Firefox Translate — Browser mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mozilla+Headline:wght@400;500;600;700&family=Mozilla+Text:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark-purple: #190F2E;
+    --purple-9: #6B00D5;
+    --soft-purple-1: #F1E7F8;
+    --firefox-blue: #0060DF;
+    --grey-1: #F9F9FB;
+    --grey-2: #E8E8E8;
+    --grey-3: #D3D1C7;
+    --black-1: #42414D;
+    --black-2: #5F5E5A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: transparent;
+    font-family: 'Mozilla Text', system-ui, -apple-system, sans-serif;
+    color: var(--dark-purple);
+  }
+
+  body {
+    width: 980px;
+    padding: 50px;
+  }
+
+  /* ---- Browser window ---- */
+  .browser {
+    width: 880px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow:
+      0 1px 0 rgba(25, 15, 46, 0.04),
+      0 30px 60px -20px rgba(25, 15, 46, 0.18),
+      0 12px 28px -8px rgba(25, 15, 46, 0.08);
+    overflow: hidden;
+    border: 1px solid rgba(25, 15, 46, 0.06);
+  }
+
+  .chrome {
+    background: var(--grey-1);
+    padding: 14px 16px 0;
+    border-bottom: 1px solid var(--grey-2);
+  }
+
+  .traffic { display: flex; gap: 8px; margin-bottom: 12px; }
+  .traffic span { width: 12px; height: 12px; border-radius: 50%; }
+  .traffic span:nth-child(1) { background: #FF5F57; }
+  .traffic span:nth-child(2) { background: #FEBC2E; }
+  .traffic span:nth-child(3) { background: #28C840; }
+
+  .tabs { display: flex; align-items: flex-end; gap: 4px; }
+
+  .tab {
+    background: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 9px 16px 11px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--dark-purple);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--grey-2);
+    border-bottom: none;
+    max-width: 260px;
+  }
+
+  .tab .favicon {
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    background: linear-gradient(135deg, #6B00D5, #9D4AFF);
+    flex-shrink: 0;
+  }
+
+  /* ---- URL bar ---- */
+  .url-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #fff;
+    border-bottom: 1px solid var(--grey-2);
+  }
+
+  .nav-arrows { display: flex; gap: 6px; color: #B4B2A9; }
+  .nav-arrows svg { width: 16px; height: 16px; }
+
+  .url-input {
+    flex: 1;
+    background: var(--grey-1);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 13px;
+    color: var(--black-1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .url-input .lock { width: 12px; height: 12px; color: var(--black-2); flex-shrink: 0; }
+  .url-input .url-text {
+    font-family: 'Mozilla Text', sans-serif;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ---- URL bar icon strip (right side) ---- */
+  .url-icons {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .icon-btn {
+    background: transparent;
+    border: none;
+    width: 32px;
+    height: 30px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--black-2);
+    cursor: pointer;
+    padding: 0;
+  }
+  .icon-btn svg { width: 16px; height: 16px; }
+
+  /* The active translate button — wider, holds the 文A glyph + dynamic blue pill */
+  .translate-btn {
+    width: auto;
+    height: 30px;
+    padding: 0 5px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(25, 15, 46, 0.04);
+  }
+
+  /* 文A composite glyph — matches Firefox's translate icon */
+  .char-stack {
+    position: relative;
+    width: 19px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+  .char-stack .cn {
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 500;
+    color: var(--dark-purple);
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+  .char-stack .en {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 700;
+    color: var(--dark-purple);
+    font-family: 'Mozilla Text', sans-serif;
+  }
+
+  /* Dynamic blue language-code pill — the bit that cycles */
+  .lang-pill-mini {
+    background: var(--firefox-blue);
+    color: #fff;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Mozilla Text', sans-serif;
+    position: relative;
+    width: 22px;
+    height: 19px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .lang-pill-mini .code {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: code-cycle 16.8s ease-in-out infinite;
+  }
+
+  /* ---- Page content ---- */
+  .page {
+    position: relative;
+    padding: 36px 44px 56px;
+    min-height: 360px;
+    background: #fff;
+  }
+
+  .breadcrumb {
+    font-family: 'Mozilla Text', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #888780;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 14px;
+  }
+
+  .article { position: relative; min-height: 240px; }
+
+  .lang-layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    animation: lang-cycle 16.8s ease-in-out infinite;
+  }
+
+  .lang-layer h1 {
+    font-family: 'Mozilla Headline', sans-serif;
+    font-size: 34px;
+    line-height: 1.15;
+    font-weight: 600;
+    color: var(--dark-purple);
+    letter-spacing: -0.015em;
+    margin-bottom: 14px;
+  }
+
+  .lang-layer .byline {
+    font-family: 'Mozilla Text', sans-serif;
+    font-size: 13px;
+    color: var(--black-2);
+    margin-bottom: 18px;
+  }
+
+  .lang-layer p {
+    font-family: 'Mozilla Text', sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--black-1);
+    max-width: 640px;
+  }
+
+  .lang-ja h1, .lang-ja p, .lang-ja .byline { font-family: 'Noto Sans JP', 'Mozilla Text', sans-serif; }
+  .lang-ja h1 { font-weight: 700; }
+  .lang-ar { direction: rtl; text-align: right; }
+  .lang-ar h1, .lang-ar p, .lang-ar .byline { font-family: 'Noto Sans Arabic', 'Mozilla Text', sans-serif; }
+  .lang-ar h1 { font-weight: 600; }
+  .lang-hi h1, .lang-hi p, .lang-hi .byline { font-family: 'Noto Sans Devanagari', 'Mozilla Text', sans-serif; }
+
+  @keyframes lang-cycle {
+    0%   { opacity: 0; transform: translateY(6px); }
+    1.5% { opacity: 1; transform: translateY(0); }
+    13%  { opacity: 1; transform: translateY(0); }
+    14.5%{ opacity: 0; transform: translateY(-6px); }
+    100% { opacity: 0; transform: translateY(-6px); }
+  }
+
+  /* The blue language code flips on a snappier curve so it feels like a UI swap */
+  @keyframes code-cycle {
+    0%   { opacity: 0; transform: translateY(8px); }
+    1%   { opacity: 1; transform: translateY(0); }
+    13.5%{ opacity: 1; transform: translateY(0); }
+    14.5%{ opacity: 0; transform: translateY(-8px); }
+    100% { opacity: 0; transform: translateY(-8px); }
+  }
+
+  /* Stagger: 7 languages × 2.4s = 16.8s total */
+  .lang-en, .lang-pill-mini .code-en { animation-delay: 0s; }
+  .lang-fr, .lang-pill-mini .code-fr { animation-delay: 2.4s; }
+  .lang-de, .lang-pill-mini .code-de { animation-delay: 4.8s; }
+  .lang-ja, .lang-pill-mini .code-ja { animation-delay: 7.2s; }
+  .lang-ar, .lang-pill-mini .code-ar { animation-delay: 9.6s; }
+  .lang-es, .lang-pill-mini .code-es { animation-delay: 12s; }
+  .lang-hi, .lang-pill-mini .code-hi { animation-delay: 14.4s; }
+
+  /* ---- Privacy badge ---- */
+  .privacy-badge {
+    position: absolute;
+    bottom: 22px;
+    right: 24px;
+    background: var(--soft-purple-1);
+    color: var(--dark-purple);
+    border-radius: 100px;
+    padding: 10px 16px 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Mozilla Text', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid rgba(107, 0, 213, 0.12);
+  }
+  .privacy-badge .shield {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--purple-9);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .privacy-badge .shield svg { width: 12px; height: 12px; }
+  .privacy-badge strong { font-weight: 600; }
+  .privacy-badge .dim { font-weight: 400; color: var(--black-1); }
+</style>
+</head>
+<body>
+
+<div class="browser" role="img" aria-label="Animated Firefox browser mockup translating an article through seven languages with the target language code cycling in the URL bar translate icon">
+
+  <div class="chrome">
+    <div class="traffic"><span></span><span></span><span></span></div>
+    <div class="tabs">
+      <div class="tab">
+        <span class="favicon"></span>
+        <span>The Daily Globe — The future of work</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="url-bar">
+    <div class="nav-arrows">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+
+    <div class="url-input">
+      <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="11" width="16" height="10" rx="2"/>
+        <path d="M8 11V8a4 4 0 0 1 8 0v3"/>
+      </svg>
+      <span class="url-text">dailyglobe.example/world/future-of-work</span>
+    </div>
+
+    <div class="url-icons">
+
+      <!-- Reader view -->
+      <button class="icon-btn" title="Reader view">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="3" width="14" height="18" rx="1.5"/>
+          <line x1="8.5" y1="8" x2="15.5" y2="8"/>
+          <line x1="8.5" y1="12" x2="15.5" y2="12"/>
+          <line x1="8.5" y1="16" x2="13" y2="16"/>
+        </svg>
+      </button>
+
+      <!-- Translate (active) — 文A glyph + dynamic blue language-code pill -->
+      <button class="icon-btn translate-btn" title="Translate this page">
+        <span class="char-stack">
+          <span class="cn">文</span>
+          <span class="en">A</span>
+        </span>
+        <span class="lang-pill-mini">
+          <span class="code code-en">en</span>
+          <span class="code code-fr">fr</span>
+          <span class="code code-de">de</span>
+          <span class="code code-ja">ja</span>
+          <span class="code code-ar">ar</span>
+          <span class="code code-es">es</span>
+          <span class="code code-hi">hi</span>
+        </span>
+      </button>
+
+      <!-- Extensions / apps grid -->
+      <button class="icon-btn" title="Extensions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="4" width="6.5" height="6.5" rx="1.2"/>
+          <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2"/>
+          <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2"/>
+          <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2"/>
+        </svg>
+      </button>
+
+      <!-- Bookmark / star -->
+      <button class="icon-btn" title="Bookmark this page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12,3.5 14.6,9 20.5,9.8 16.2,13.9 17.3,19.7 12,16.9 6.7,19.7 7.8,13.9 3.5,9.8 9.4,9"/>
+        </svg>
+      </button>
+
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="breadcrumb">World · Feature</div>
+
+    <div class="article">
+
+      <div class="lang-layer lang-en">
+        <h1>The future of work is borderless</h1>
+        <div class="byline">By Anya Petrova · 12 min read</div>
+        <p>From Tokyo to Berlin, teams are connecting across continents. New research shows remote collaboration has reshaped how the global workforce communicates, and the shift is only just beginning.</p>
+      </div>
+
+      <div class="lang-layer lang-fr">
+        <h1>L'avenir du travail est sans frontières</h1>
+        <div class="byline">Par Anya Petrova · 12 min de lecture</div>
+        <p>De Tokyo à Berlin, les équipes se connectent à travers les continents. De nouvelles recherches montrent que la collaboration à distance a transformé la manière dont la main-d'œuvre mondiale communique, et le mouvement ne fait que commencer.</p>
+      </div>
+
+      <div class="lang-layer lang-de">
+        <h1>Die Zukunft der Arbeit kennt keine Grenzen</h1>
+        <div class="byline">Von Anya Petrova · 12 Min. Lesezeit</div>
+        <p>Von Tokio bis Berlin vernetzen sich Teams über Kontinente hinweg. Neue Studien zeigen, dass die Remote-Zusammenarbeit die Kommunikation der globalen Arbeitswelt grundlegend verändert hat – und der Wandel hat gerade erst begonnen.</p>
+      </div>
+
+      <div class="lang-layer lang-ja">
+        <h1>仕事の未来に、国境はない</h1>
+        <div class="byline">アーニャ・ペトロワ · 12分で読了</div>
+        <p>東京からベルリンまで、チームは大陸を越えてつながっています。新たな研究によれば、リモートでの協働は世界中の働き手のコミュニケーションのあり方を大きく変えました。その流れは、まだ始まったばかりです。</p>
+      </div>
+
+      <div class="lang-layer lang-ar">
+        <h1>مستقبل العمل بلا حدود</h1>
+        <div class="byline">بقلم آنيا بيتروفا · قراءة 12 دقيقة</div>
+        <p>من طوكيو إلى برلين، تتواصل الفرق عبر القارات. وتكشف أبحاث جديدة أن التعاون عن بُعد قد أعاد تشكيل طريقة تواصل القوى العاملة العالمية، وهذا التحول لا يزال في بدايته.</p>
+      </div>
+
+      <div class="lang-layer lang-es">
+        <h1>El futuro del trabajo no tiene fronteras</h1>
+        <div class="byline">Por Anya Petrova · 12 min de lectura</div>
+        <p>Desde Tokio hasta Berlín, los equipos se conectan a través de los continentes. Nuevas investigaciones revelan que la colaboración remota ha transformado la forma en que se comunica la fuerza laboral global, y el cambio apenas comienza.</p>
+      </div>
+
+      <div class="lang-layer lang-hi">
+        <h1>काम का भविष्य सीमाओं से परे है</h1>
+        <div class="byline">आन्या पेत्रोवा · 12 मिनट पढ़ें</div>
+        <p>टोक्यो से बर्लिन तक, टीमें महाद्वीपों के पार जुड़ रही हैं। नए शोध बताते हैं कि दूरस्थ सहयोग ने वैश्विक कार्यबल के संवाद के तरीके को बदल दिया है, और यह बदलाव अभी शुरू ही हुआ है।</p>
+      </div>
+
+    </div>
+
+    <div class="privacy-badge">
+      <div class="shield">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+      </div>
+      <span><strong>Translated locally.</strong> <span class="dim">Never tracked.</span></span>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
